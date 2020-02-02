@@ -28,8 +28,10 @@ public class Main {
 			parser+=scn.nextLine();
 		}
 		scn.close();
+		String allstring =  parser.substring(parser.indexOf("Asia"));
+
 		System.out.println(parser.substring(parser.indexOf("Situation"), parser.indexOf("CET")+3));
-		parser = parser.substring(parser.indexOf("Asia"));
+		parser = parser.substring(parser.indexOf("Asia")).replace(" and ", ", ");
 		String continent[] = {"Asia", "Europe","America","Oceania", "."};
 		String listOfCountries[] = new String[4];
 		ArrayList<String> country = new ArrayList<>();
@@ -49,7 +51,6 @@ public class Main {
 				}
 				listOfCountries[i] = listOfCountries[i].substring(listOfCountries[i].indexOf(",")+1);		
 			}
-			//System.out.println(listOfCountries[i]);
 		}
 
 		Set<String> set = new LinkedHashSet<>(country);
@@ -57,29 +58,110 @@ public class Main {
 		country.addAll(set);
 
 		for (int i=0; i< country.size(); i++) {
-			 country.set(i,  country.get(i).replace("strong", ""));
-			 country.set(i,  country.get(i).replace("</>", ""));
-			 country.set(i,  country.get(i).replace("<br /><>", ""));
-			 country.set(i,  country.get(i).replace(":", ""));
-			 country.set(i,  country.get(i).replace("(", ": "));
-			 country.set(i,  country.get(i).replace(")", ""));
-			 country.set(i,  country.get(i).replace(" and ", "\n "));
+			country.set(i,  country.get(i).replace("strong", ""));
+			country.set(i,  country.get(i).replace("</>", ""));
+			country.set(i,  country.get(i).replace("<br /><>", ""));
+			country.set(i,  country.get(i).replace(":", ""));
+			country.set(i,  country.get(i).replace("(", ": "));
+			country.set(i,  country.get(i).replace(")", ""));
+			//country.set(i,  country.get(i).replace(" and ", "\n "));
 
-			 for (int j=0; j< continent.length; j++) {
-				 country.set(i,country.get(i).replace(continent[j], ""));
+			for (int j=0; j< continent.length; j++) {
+				country.set(i,country.get(i).replace(continent[j], ""));
 
-			 }
+			}
 		}
-		
+
 		for (int i=0; i< country.size(); i++) {
 			System.out.println(country.get(i));
 		}
+
+		String death = allstring.substring(allstring.indexOf("Oceania"), allstring.indexOf("deaths"));
+		String death2 = death.substring(death.indexOf("<p>"));
+		getDeaths(death2, "Total");
+		String chinadeath = allstring.substring(allstring.indexOf("Oceania"));
+		death2 = chinadeath.substring(chinadeath.indexOf("deaths"), chinadeath.indexOf("China"));
+		getDeaths(death2, "China");
+
+		System.out.println("All countries");
+
+		ArrayList<String> allCountries = GetAllCountries(country);
+		for (int i=0; i<allCountries.size(); i++) {
+			System.out.println(allCountries.get(i));
+		}
+
+		System.out.println("All numbers");
+		ArrayList<String> allInfections = GetAllInfections(country);
+		for (int i=0; i<allInfections.size(); i++) {
+			System.out.println(allInfections.get(i));
+		}
+
+
+	}
+
+	public static void getDeaths(String death2, String whereisit) {
+		char[] replacepraren = death2.toCharArray();
+		String totaldeath = "";
+
+		for (int i=0; i< replacepraren.length;i++) {
+			if (replacepraren[i]>= '0' && replacepraren[i]<= '9') {
+				totaldeath+=replacepraren[i];
+			}
+		}
+		System.out.println(whereisit + " deaths: "+ totaldeath);
 	}
 
 
+	public static ArrayList<String> GetAllInfections(ArrayList<String> country) {
+		ArrayList<String> listCountry = new ArrayList<>();
 
-    //deprecated
+		for (int i=0; i<country.size(); i++) {
+			country.set(i, country.get(i).substring(country.get(i).indexOf(":")+1));
+			char[] replacepraren = country.get(i).toCharArray();
+			String all = "";
+			for (int j=0; j< replacepraren.length;j++) {
+				all+=replacepraren[j];
+			}
+			listCountry.add(all);
+		}
 
+		return listCountry;
+
+		/*
+		for (int i=0; i<listCountry.size(); i++) {
+			System.out.println(listCountry.get(i));
+		}
+		 */
+
+	}
+
+	public static ArrayList<String> GetAllCountries(ArrayList<String> country) {
+		ArrayList<String> listCountry = new ArrayList<>();
+		for (int i=0; i<country.size(); i++) {
+			char[] replacepraren = country.get(i).toCharArray();
+			String all = "";
+			for (int j=0; j< replacepraren.length;j++) {
+				if (replacepraren[j] != ':') {
+					all+=replacepraren[j];
+				}else {
+					listCountry.add(all);
+					break;
+				}
+			}
+
+		}
+
+		return listCountry;
+
+		/*
+		for (int i=0; i<listCountry.size(); i++) {
+			System.out.println(listCountry.get(i));
+		}
+		 */
+
+	}
+
+	/*deprecated
 	public static void ParseEcdcWebsite() throws IOException {
 		URL url = new URL("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -103,7 +185,7 @@ public class Main {
 		}
 
 	}
-
+	//deprecated
 	public static void readData(String fff, String location) {
 		String china = fff.substring(fff.indexOf(location));
 		String Achina = china.substring(china.indexOf(location), china.indexOf(")"));
@@ -116,8 +198,7 @@ public class Main {
 		Achina = String.valueOf(replacepraren);
 		System.out.println(Achina);
 	}
-
-    //deprecated
+	//deprecated
 	public static void parseWebsite() throws IOException {
 		URL url = new URL("http://health.people.com.cn/GB/26466/431463/431576/index.html");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -157,18 +238,17 @@ public class Main {
 			System.out.println();
 		}
 	}
-    //deprecated
-
+	//deprecated
 	public static void DisplayDataLast(String where, String eee, String about) {
 		String chinaTotal = eee.substring(eee.indexOf(where));
 		String chinaTotalOff = 	chinaTotal.substring(chinaTotal.indexOf(":")+2);
 		System.out.println(about + chinaTotalOff);
 	}
-    //deprecated
-
+	//deprecated
 	public static void DisplayData(String where, String eee, String about) {
 		String chinaTotal = eee.substring(eee.indexOf(where));
 		String chinaTotalOff = 	chinaTotal.substring(chinaTotal.indexOf(":")+2, chinaTotal.indexOf(","));
 		System.out.println(about + chinaTotalOff);
 	}
+	*/
 }
