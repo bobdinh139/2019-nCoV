@@ -122,6 +122,7 @@ public class Main {
 			for (int j=0; j< replacepraren.length;j++) {
 				all+=replacepraren[j];
 			}
+			if(!(all.equals("") || all.equals(" ") || all.equals(null)))
 			listCountry.add(all);
 		}
 
