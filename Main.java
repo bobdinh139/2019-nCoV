@@ -91,11 +91,13 @@ public class Main {
 		}
 
 		System.out.println("All numbers");
-		ArrayList<String> allInfections = GetAllInfections(country);
+		ArrayList<Integer> allInfections = GetAllInfections(country);
+    int allin =0;
 		for (int i=0; i<allInfections.size(); i++) {
+      allin+=allInfections.get(i);
 			System.out.println(allInfections.get(i));
 		}
-
+    System.out.println("all cases: "+allin);
 
 	}
 
@@ -112,8 +114,8 @@ public class Main {
 	}
 
 
-	public static ArrayList<String> GetAllInfections(ArrayList<String> country) {
-		ArrayList<String> listCountry = new ArrayList<>();
+	public static ArrayList<Integer> GetAllInfections(ArrayList<String> country) {
+		ArrayList<Integer> listCountry = new ArrayList<>();
 
 		for (int i=0; i<country.size(); i++) {
 			country.set(i, country.get(i).substring(country.get(i).indexOf(":")+1));
@@ -122,10 +124,11 @@ public class Main {
 			for (int j=0; j< replacepraren.length;j++) {
 				all+=replacepraren[j];
 			}
-			if(!(all.equals("") || all.equals(" ") || all.equals(null)))
-			listCountry.add(all);
+      if (!(all.equals("")||all.equals(null) || all.equals(" ") )){
+			all=all.replace(" ","");
+      listCountry.add(Integer.parseInt(all));
+      }
 		}
-
 		return listCountry;
 
 		/*
@@ -145,7 +148,7 @@ public class Main {
 				if (replacepraren[j] != ':') {
 					all+=replacepraren[j];
 				}else {
-					listCountry.add(all);
+					listCountry.add(all.trim());
 					break;
 				}
 			}
@@ -253,3 +256,11 @@ public class Main {
 	}
 	*/
 }
+
+
+
+
+
+
+	
+	
