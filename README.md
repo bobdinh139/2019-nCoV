@@ -49,3 +49,7 @@ GetUpdate.getChinaDeaths()
 ```
 
 returns an ```int```; gets total deaths in China.
+
+**important**
+
+```GetUpdate.GetAllCountries()``` and ```GetUpdate.GetAllInfections()``` are parallel arrays, with that said, index of one is the index of another.
