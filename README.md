@@ -9,42 +9,42 @@ jff project to track total cases of 2019-nCoV virus using ~~[people.cn](http://h
 ### Usage
 
 ```java
-GetUpdate().getDateUpdated()
+GetUpdate.getDateUpdated()
 
 ```
 
 returns a ```String```; gets the date that the data is last updated.
 
 ```java
-GetUpdate().GetAllCountries()
+GetUpdate.GetAllCountries()
 
 ```
 
 returns an ```ArrayList<String>```; gets all infected countries.
 
 ```java
-GetUpdate().GetAllInfections()
+GetUpdate.GetAllInfections()
 
 ```
 
 returns an ```ArrayList<Integer>```; gets all numbers of infections.
 
 ```java
-GetUpdate().getAllCases()
+GetUpdate.getAllCases()
 
 ```
 
 returns an ```int```; gets total infections.
 
 ```java
-GetUpdate().getAllDeaths()
+GetUpdate.getAllDeaths()
 
 ```
 
 returns an ```int```; gets total deaths.
 
 ```java
-GetUpdate().getChinaDeaths()
+GetUpdate.getChinaDeaths()
 
 ```
 
