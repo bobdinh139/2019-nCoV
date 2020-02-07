@@ -37,6 +37,13 @@ GetUpdate.getAllCases()
 returns an ```int```; gets total infections.
 
 ```java
+GetUpdate.getAllCasesAlt()
+
+```
+
+returns an ```int```; gets total infections. Use this when ```getAllCases()``` does not work. But this needs to be called after ```GetAllInfections()``` is called; otherwise,```GetAllInfections()``` and ```GetAllCountries()``` will return nothing.
+
+```java
 GetUpdate.getAllDeaths()
 
 ```
