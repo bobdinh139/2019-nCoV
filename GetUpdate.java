@@ -14,12 +14,12 @@ public class GetUpdate {
 	private String parser = "";
 	private String allstring="";
 	private String parse="";
-	private	String continent[] = {"Asia", "America","Oceania","Europe", "."};
+	private	String continent[] = {"Asia", "America","Europe","Oceania", "."};
 	public GetUpdate() throws IOException {
 		ParseEcdc() ;
 	}
-	
-	
+
+
 	private void ParseEcdc() throws IOException {
 		URL url = new URL("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -35,7 +35,7 @@ public class GetUpdate {
 		parse = parser;
 		allstring =  parser.substring(parser.indexOf("Asia"));
 
-		parser = parser.substring(parser.indexOf("Asia")).replace(" and ", ", ");
+		parser = parser.substring(parser.indexOf("Asia")).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "");
 
 		String listOfCountries[] = new String[4];
 
@@ -70,6 +70,7 @@ public class GetUpdate {
 			country.set(i,  country.get(i).replace("<p>", ""));
 			country.set(i,  country.get(i).replace("</p>", ""));
 			country.set(i,  country.get(i).replace("<>", ""));
+
 			
 			for (int j=0; j< continent.length; j++) {
 				country.set(i,country.get(i).replace(continent[j], ""));
@@ -110,14 +111,18 @@ public class GetUpdate {
 	}
 
 	public String getDateUpdated() throws IOException {
-    String temp = parse.substring(parse.indexOf("<strong>"));
-		lastUpdateDate = temp.substring(temp.indexOf("Situation"), temp.indexOf("CET")+3);
-		return lastUpdateDate;
+		String temp = parse.substring(parse.indexOf("31 December"));
+		lastUpdateDate = temp.substring(temp.indexOf("2019")+4, temp.indexOf(","));
+		lastUpdateDate= lastUpdateDate.replace("and","");
+		lastUpdateDate= lastUpdateDate.replace("as","");
+		lastUpdateDate= lastUpdateDate.replace("of","");
+
+		return lastUpdateDate.trim();
 	}
 
 	public int getAllCases() throws IOException {
-	    String temp = parse.substring(parse.indexOf("<strong>"));
-        String allcase="";
+		String temp = parse.substring(parse.indexOf("Since"));
+		String allcase="";
 		char[] replacepraren = temp.substring(temp.indexOf(",")+1, temp.indexOf("cases")).toCharArray();
 
 		for (int i=0; i< replacepraren.length;i++) {
@@ -127,7 +132,7 @@ public class GetUpdate {
 		}
 		return Integer.parseInt(allcase);
 	}
-	
+
 	public int getAllCasesAlt() throws IOException {
 		for (int i=0; i<GetAllInfections().size(); i++) {
 			allCases+=GetAllInfections().get(i);
@@ -138,6 +143,7 @@ public class GetUpdate {
 	public ArrayList<Integer> GetAllInfections() throws IOException {
 		ArrayList<Integer> listCountry = new ArrayList<>();
 
+		
 		for (int i=0; i<country.size(); i++) {
 			country.set(i, country.get(i).substring(country.get(i).indexOf(":")+1));
 			char[] replacepraren = country.get(i).toCharArray();
