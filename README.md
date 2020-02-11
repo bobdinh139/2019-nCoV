@@ -57,6 +57,10 @@ GetUpdate.getChinaDeaths()
 
 returns an ```int```; gets total deaths in China.
 
-**important**
+**Important:**
 
 ```GetUpdate.GetAllCountries()``` and ```GetUpdate.GetAllInfections()``` are parallel arrays, with that said, index of one is the index of another.
+
+The [ecdc.europa.eu](https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases) website keeps getting update which broke the program frequently, wait a little bit for a fix.
+
+China recently update their "suspected and confirmed case" program which if a patient has 2019-nCoV but does not show symptoms, it does not count as confirmed case. Hence, dramatically decrease the number of confirmed cases.
