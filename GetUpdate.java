@@ -120,18 +120,18 @@ public class GetUpdate {
         return lastUpdateDate.trim();
     }
 
-    public int getAllCases() throws IOException {
-        String temp = parse.substring(parse.indexOf("Since"));
-        String allcase="";
-        char[] replacepraren = temp.substring(temp.indexOf(",")+1, temp.indexOf("cases")).toCharArray();
+	public int getAllCases() throws IOException {
+		String temp = parse.substring(parse.indexOf("Since"));
+		String allcase="";
+		char[] replacepraren = temp.substring(temp.indexOf(",")+1, temp.indexOf("COVID")).toCharArray();
 
-        for (int i=0; i< replacepraren.length;i++) {
-            if (replacepraren[i]>= '0' && replacepraren[i]<= '9') {
-                allcase+=replacepraren[i];
-            }
-        }
-        return Integer.parseInt(allcase);
-    }
+		for (int i=0; i< replacepraren.length;i++) {
+			if (replacepraren[i]>= '0' && replacepraren[i]<= '9') {
+				allcase+=replacepraren[i];
+			}
+		}
+		return Integer.parseInt(allcase);
+	}
 
     public int getAllCasesAlt() throws IOException {
         for (int i=0; i<GetAllInfections().size(); i++) {
