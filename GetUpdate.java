@@ -15,7 +15,7 @@ public class GetUpdate {
 	private String allstring="";
 	private String allstring2="";
 	private String parse="";
-	private	String continent[] = {"Asia", "America","Europe","Oceania", "."};
+	private	String continent[] = {"Africa","Asia", "America","Europe","Oceania", "."};
 	public GetUpdate() throws IOException {
 		ParseEcdc() ;
 	}
@@ -34,11 +34,11 @@ public class GetUpdate {
 		}
 		scn.close();
 		parse = parser;
-		allstring =  parser.substring(parser.indexOf("Asia"));
+		allstring =  parser.substring(parser.indexOf(continent[0]));
 		allstring2 =  parser.substring(parser.indexOf("Since"));
-		parser = parser.substring(parser.indexOf("Asia")).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "");
+		parser = parser.substring(parser.indexOf(continent[0])).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "");
 
-		String listOfCountries[] = new String[4];
+		String listOfCountries[] = new String[5];
 
 		for (int i=0; i< continent.length-1;i++) {
 			parser = parser.substring(parser.indexOf(continent[i]));
@@ -94,6 +94,8 @@ public class GetUpdate {
 		String death = allstring2.substring(allstring2.indexOf("<p>")+3);
 		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
 		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
+    death = death.replace("(PRC)","");
+    death = death.replace("(SAR)","");
 		death = death.replace("(", ": ");
 		death = death.replace(")", "");
 		death = death.replace("and", "");
@@ -122,6 +124,8 @@ public class GetUpdate {
 		String death = allstring2.substring(allstring2.indexOf("<p>")+3);
 		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
 		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
+    death = death.replace("(SAR)","");
+    death= death.replace("PRC","");
 		death = death.replace("(", ": ");
 		death = death.replace(")", "");
 		death = death.replace("and", ",");
