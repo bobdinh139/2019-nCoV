@@ -15,7 +15,7 @@ public class GetUpdate {
 	private String allstring="";
 	private String allstring2="";
 	private String parse="";
-	private	String continent[] = {"Africa","Asia", "America","Europe","Oceania", "."};
+	private	String continent[] = {"Africa","Asia", "America","Europe","Oceania","Other", "."};
 	public GetUpdate() throws IOException {
 		ParseEcdc() ;
 	}
@@ -36,9 +36,9 @@ public class GetUpdate {
 		parse = parser;
 		allstring =  parser.substring(parser.indexOf(continent[0]));
 		allstring2 =  parser.substring(parser.indexOf("Since"));
-		parser = parser.substring(parser.indexOf(continent[0])).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "");
+		parser = parser.substring(parser.indexOf(continent[0])).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "").replace("(Japan)","--Japan");
 
-		String listOfCountries[] = new String[5];
+		String listOfCountries[] = new String[6];
 
 		for (int i=0; i< continent.length-1;i++) {
 			parser = parser.substring(parser.indexOf(continent[i]));
