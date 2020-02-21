@@ -13,7 +13,7 @@ public class GetUpdate {
 	private ArrayList<String> country = new ArrayList<>();
 	private String parser = "";
 	private String allstring="";
-  	private String allstring2="";
+	private String allstring2="";
 	private String parse="";
 	private	String continent[] = {"Asia", "America","Europe","Oceania", "."};
 	public GetUpdate() throws IOException {
@@ -35,7 +35,7 @@ public class GetUpdate {
 		scn.close();
 		parse = parser;
 		allstring =  parser.substring(parser.indexOf("Asia"));
-   	allstring2 =  parser.substring(parser.indexOf("Since"));
+		allstring2 =  parser.substring(parser.indexOf("Since"));
 		parser = parser.substring(parser.indexOf("Asia")).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "");
 
 		String listOfCountries[] = new String[4];
@@ -72,7 +72,7 @@ public class GetUpdate {
 			country.set(i,  country.get(i).replace("</p>", ""));
 			country.set(i,  country.get(i).replace("<>", ""));
 
-			
+
 			for (int j=0; j< continent.length; j++) {
 				country.set(i,country.get(i).replace(continent[j], ""));
 
@@ -84,16 +84,69 @@ public class GetUpdate {
 	public int getAllDeaths() throws IOException {
 		String death = allstring2.substring(allstring2.indexOf("<p>"), allstring2.indexOf("deaths"));
 		String death2 = death.substring(death.indexOf("<p>"));
-    death2 = death2.substring(death2.indexOf("2020")+4);
+		death2 = death2.substring(death2.indexOf("2020")+4);
 		return ParseDeaths(death2);
 	}
 
-	public int getChinaDeaths() throws IOException {
-		String chinadeath = allstring2.substring(allstring2.indexOf("Since"));
-		String death2 = chinadeath.substring(chinadeath.indexOf("deaths"), chinadeath.indexOf("China"));
 
-		return ParseDeaths(death2);
+	public ArrayList<String> getCountryDeaths(){
+		ArrayList<String> allCountryDeaths = new ArrayList<String>();
+		String death = allstring2.substring(allstring2.indexOf("<p>")+3);
+		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
+		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
+		death = death.replace("(", ": ");
+		death = death.replace(")", "");
+		death = death.replace("and", "");
+		death = death.replace("the", "");
+		for (int i =0; i< 10; i++) {
+			death = death.replace(Integer.toString(i), "");
+		}
+		death = death.replace(".", "");
+		death = death.replace(",", "");
+		char[] replacepraren = death.toCharArray();
+		String countrydeath = "";
+
+		for (int i=0; i < replacepraren.length; i++) {
+				if (replacepraren[i] != ':') {
+					countrydeath+=replacepraren[i];
+				} else {
+					allCountryDeaths.add(countrydeath.trim());
+					countrydeath = "";
+				}
+		}
+		return allCountryDeaths;
 	}
+
+	public ArrayList<Integer> getCountryDeathsNum(){
+		ArrayList<Integer> allCountryDeaths = new ArrayList<Integer>();
+		String death = allstring2.substring(allstring2.indexOf("<p>")+3);
+		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
+		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
+		death = death.replace("(", ": ");
+		death = death.replace(")", "");
+		death = death.replace("and", ",");
+		death = death.replace("the", "");
+		death = death.replace(":", "");
+		death = death.replace(" ", "");
+		death = death.replace(".", ",");
+		death = death.replace("--", "");
+		char[] replacepraren = death.toCharArray();
+		String countrydeath = "";
+
+		for (int i=0; i < replacepraren.length; i++) {
+			if (replacepraren[i] >= '0' && replacepraren[i] <= '9') {
+				countrydeath+=replacepraren[i];
+			} else if (replacepraren[i]  == ','){
+				allCountryDeaths.add(Integer.parseInt(countrydeath));
+				countrydeath = "";
+			}
+		}
+
+		return allCountryDeaths;
+	}
+
+
+
 
 	private int ParseDeaths(String death2) {
 
@@ -144,7 +197,7 @@ public class GetUpdate {
 	public ArrayList<Integer> GetAllInfections() throws IOException {
 		ArrayList<Integer> listCountry = new ArrayList<>();
 
-		
+
 		for (int i=0; i<country.size(); i++) {
 			country.set(i, country.get(i).substring(country.get(i).indexOf(":")+1));
 			char[] replacepraren = country.get(i).toCharArray();
@@ -155,11 +208,11 @@ public class GetUpdate {
 			if (!(all.equals("")||all.equals(null) || all.equals(" ") )){
 
 				all=all.replace(" ","");
-             try {
-				listCountry.add(Integer.parseInt(all));
-             }catch (Exception e){
-           	listCountry.add(ParseDeaths(all));
-             }
+				try {
+					listCountry.add(Integer.parseInt(all));
+				}catch (Exception e){
+					listCountry.add(ParseDeaths(all));
+				}
 			}
 		}
 		return listCountry;
