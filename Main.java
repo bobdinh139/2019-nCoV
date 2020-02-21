@@ -16,6 +16,7 @@ public class Main {
 		}
 		
 		System.out.println("Total cases: "+gd.getAllCases());
+    System.out.println("Total cases Alt: "+ gd.getAllCasesAlt());
 		System.out.println("Total Deaths: "+gd.getAllDeaths());
 		System.out.println("Counties reported deaths: ");
 		ArrayList<String> allCountriesDeaths = gd.getCountryDeaths() ;
@@ -120,7 +121,6 @@ public class Main {
 	}
 	 */
 }
-
 
 
 
