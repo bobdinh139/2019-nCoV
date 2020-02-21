@@ -17,7 +17,14 @@ public class Main {
 		
 		System.out.println("Total cases: "+gd.getAllCases());
 		System.out.println("Total Deaths: "+gd.getAllDeaths());
-		System.out.println("China deaths: " +gd.getChinaDeaths());
+		System.out.println("Counties reported deaths: ");
+		ArrayList<String> allCountriesDeaths = gd.getCountryDeaths() ;
+		ArrayList<Integer> allInfectionsDeaths = gd.getCountryDeathsNum();
+		for (int i=0; i< allCountriesDeaths.size(); i++) {
+			System.out.println(allCountriesDeaths.get(i) +": "+ allInfectionsDeaths.get(i));
+			
+		}
+	
 
 
 	}
