@@ -238,6 +238,10 @@ public class GetUpdate {
 			}
 
 		}
+		
+		for (int i=0; i<listCountry.size(); i++) {
+			listCountry.set(i, listCountry.get(i).replaceAll(" ", ""));
+		}
 
 		return listCountry;
 
