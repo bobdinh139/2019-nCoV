@@ -12,7 +12,6 @@ public class GetUpdate {
 	private String lastUpdateDate;
 	private ArrayList<String> country = new ArrayList<>();
 	private String parser = "";
-	private String allstring="";
 	private String allstring2="";
 	private String parse="";
 	private	String continent[] = {"Africa","Asia", "America","Europe","Oceania","Other", "."};
@@ -34,7 +33,6 @@ public class GetUpdate {
 		}
 		scn.close();
 		parse = parser;
-		allstring =  parser.substring(parser.indexOf(continent[0]));
 		allstring2 =  parser.substring(parser.indexOf("Since"));
 		parser = parser.substring(parser.indexOf(continent[0])).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "").replace("(Japan)","--Japan");
 
@@ -82,8 +80,8 @@ public class GetUpdate {
 	}
 
 	public int getAllDeaths() throws IOException {
-		String death = allstring2.substring(allstring2.indexOf("<p>"), allstring2.indexOf("deaths"));
-		String death2 = death.substring(death.indexOf("<p>"));
+		String death = allstring2.substring(allstring2.indexOf("<strong>") +8, allstring2.indexOf("deaths"));
+		String death2 = death.substring(death.indexOf("<strong>"));
 		death2 = death2.substring(death2.indexOf("2020")+4);
 		return ParseDeaths(death2);
 	}
@@ -91,11 +89,11 @@ public class GetUpdate {
 
 	public ArrayList<String> getCountryDeaths(){
 		ArrayList<String> allCountryDeaths = new ArrayList<String>();
-		String death = allstring2.substring(allstring2.indexOf("<p>")+3);
+		String death = allstring2.substring(allstring2.indexOf("<strong>")+8);
 		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
 		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
-    death = death.replace("(PRC)","");
-    death = death.replace("(SAR)","");
+		death = death.replace("(PRC)","");
+		death = death.replace("(SAR)","");
 		death = death.replace("(", ": ");
 		death = death.replace(")", "");
 		death = death.replace("and", "");
@@ -109,23 +107,23 @@ public class GetUpdate {
 		String countrydeath = "";
 
 		for (int i=0; i < replacepraren.length; i++) {
-				if (replacepraren[i] != ':') {
-					countrydeath+=replacepraren[i];
-				} else {
-					allCountryDeaths.add(countrydeath.trim());
-					countrydeath = "";
-				}
+			if (replacepraren[i] != ':') {
+				countrydeath+=replacepraren[i];
+			} else {
+				allCountryDeaths.add(countrydeath.trim());
+				countrydeath = "";
+			}
 		}
 		return allCountryDeaths;
 	}
 
 	public ArrayList<Integer> getCountryDeathsNum(){
 		ArrayList<Integer> allCountryDeaths = new ArrayList<Integer>();
-		String death = allstring2.substring(allstring2.indexOf("<p>")+3);
+		String death = allstring2.substring(allstring2.indexOf("<strong>")+8);
 		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
 		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
-    death = death.replace("(SAR)","");
-    death= death.replace("PRC","");
+		death = death.replace("(SAR)","");
+		death= death.replace("PRC","");
 		death = death.replace("(", ": ");
 		death = death.replace(")", "");
 		death = death.replace("and", ",");
@@ -140,7 +138,7 @@ public class GetUpdate {
 		for (int i=0; i < replacepraren.length; i++) {
 			if (replacepraren[i] >= '0' && replacepraren[i] <= '9') {
 				countrydeath+=replacepraren[i];
-			} else if (replacepraren[i]  == ','){
+			} else if (replacepraren[i]  == ',' && !countrydeath.equals("")){
 				allCountryDeaths.add(Integer.parseInt(countrydeath));
 				countrydeath = "";
 			}
@@ -174,7 +172,7 @@ public class GetUpdate {
 		lastUpdateDate= lastUpdateDate.replace("and","");
 		lastUpdateDate= lastUpdateDate.replace("as","");
 		lastUpdateDate= lastUpdateDate.replace("of","");
-
+		lastUpdateDate= lastUpdateDate.replace("<strong>","");
 		return lastUpdateDate.trim();
 	}
 
@@ -238,7 +236,7 @@ public class GetUpdate {
 			}
 
 		}
-		
+
 		for (int i=0; i<listCountry.size(); i++) {
 			listCountry.set(i, listCountry.get(i).replaceAll(" ", ""));
 		}
