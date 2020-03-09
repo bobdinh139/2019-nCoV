@@ -14,6 +14,7 @@ public class GetUpdate {
 	private String parser = "";
 	private String allstring2="";
 	private String parse="";
+	private int constantF =0;
 	private	String continent[] = {"Africa","Asia", "America","Europe","Oceania","Other", "."};
 	public GetUpdate() throws IOException {
 		ParseEcdc() ;
@@ -34,6 +35,9 @@ public class GetUpdate {
 		scn.close();
 		parse = parser;
 		allstring2 =  parser.substring(parser.indexOf("Since"));
+		
+		constantF = allstring2.indexOf("Since") +5;
+		
 		parser = parser.substring(parser.indexOf(continent[0])).replace(" and ", ", ").replace("(PRC)", "").replace("(Special Administrative Region)", "").replace("(Japan)","--Japan");
 
 		String listOfCountries[] = new String[6];
@@ -80,16 +84,16 @@ public class GetUpdate {
 	}
 
 	public int getAllDeaths() throws IOException {
-		String death = allstring2.substring(allstring2.indexOf("<strong>") +8, allstring2.indexOf("deaths"));
-		String death2 = death.substring(death.indexOf("<strong>"));
-		death2 = death2.substring(death2.indexOf("2020")+4);
+		String death = allstring2.substring(constantF, allstring2.indexOf("deaths"));
+		String death2 = death.substring(death.indexOf("COVID-19"));
+		death2 = death2.substring(death2.indexOf("(")+1);
 		return ParseDeaths(death2);
 	}
 
 
 	public ArrayList<String> getCountryDeaths(){
 		ArrayList<String> allCountryDeaths = new ArrayList<String>();
-		String death = allstring2.substring(allstring2.indexOf("<strong>")+8);
+		String death = allstring2.substring(constantF);
 		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
 		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
 		death = death.replace("(PRC)","");
@@ -110,6 +114,7 @@ public class GetUpdate {
 			if (replacepraren[i] != ':') {
 				countrydeath+=replacepraren[i];
 			} else {
+				countrydeath = countrydeath.replaceAll(" ", "");
 				allCountryDeaths.add(countrydeath.trim());
 				countrydeath = "";
 			}
@@ -119,7 +124,7 @@ public class GetUpdate {
 
 	public ArrayList<Integer> getCountryDeathsNum(){
 		ArrayList<Integer> allCountryDeaths = new ArrayList<Integer>();
-		String death = allstring2.substring(allstring2.indexOf("<strong>")+8);
+		String death = allstring2.substring(constantF);
 		death = death.substring(death.indexOf("from")+4, death.indexOf("</p>"));
 		death = death.replace("an international conveyance (Japan)", "an international conveyance--Japan");
 		death = death.replace("(SAR)","");
